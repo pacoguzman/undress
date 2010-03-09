@@ -7,7 +7,7 @@ module Undress
     # whitespace handling
     post_processing(/\n\n+/, "\n\n")
     post_processing(/\A\s+/, "")
-    post_processing(/\s+\z/, "\n")
+    post_processing(/[\n\s]+\z/, "\n")
 
     # special characters introduced by textile
     post_processing(/&#8230;/, "...")
@@ -62,7 +62,7 @@ module Undress
     # lists
     rule_for(:li) {|e|
       token = e.parent.name == "ul" ? "*" : "#"
-      nesting = e.ancestors.inject(1) {|total,node| total + (%(ul ol).include?(node.name) ? 0 : 1) }
+      nesting = e.ancestors('body *').inject(1) {|total,node| total + (%(ul ol).include?(node.name) ? 0 : 1) }
       "\n#{token * nesting} #{content_of(e)}"
     }
     rule_for(:ul, :ol) {|e|

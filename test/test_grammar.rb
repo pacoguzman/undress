@@ -26,7 +26,7 @@ module Undress
     end
 
     def parse_with(grammar, html)
-      grammar.process!(Hpricot(html))
+      grammar.process!(Nokogiri::HTML(html) % 'body')
     end
 
     context "extending a grammar" do
@@ -58,7 +58,7 @@ module Undress
 
     context "handles attributes" do
       def attributes_for_tag(html)
-        WithAttributes.new.attributes(Hpricot(html).children.first)
+        WithAttributes.new.attributes(Nokogiri::HTML(html).children.last.children.first.children.first)
       end
 
       test "whitelisted attributes are picked up in the attributes hash" do
@@ -81,10 +81,10 @@ module Undress
 
     context "incapsulation" do
       test "icolates post_processing_rules" do
-        o1 = parse_with G1, "!!!"
-        assert_equal o1, '!!!'
+        o1 = parse_with G1, "<p>!!!</p>"
+        assert_equal '<p>!!!</p>', o1
         o2 = parse_with G2, '!!!'
-        assert_equal o2, ''
+        assert_equal '<p></p>', o2
         assert_not_equal G1.post_processing_rules['!!!'], '!!!'
       end
     end

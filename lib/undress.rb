@@ -1,13 +1,11 @@
-require "hpricot"
+require "nokogiri"
 require File.expand_path(File.dirname(__FILE__) + "/core_ext/object")
 require File.expand_path(File.dirname(__FILE__) + "/undress/grammar")
 
 # Load an HTML document so you can undress it. Pass it either a string or an IO
-# object. You can pass an optional hash of options, which will be forwarded
-# straight to Hpricot. Check it's
-# documentation[http://code.whytheluckystiff.net/doc/hpricot] for details.
-def Undress(html, options={})
-  Undress::Document.new(html, options)
+# object.
+def Undress(html)
+  Undress::Document.new(html)
 end
 
 module Undress
@@ -20,26 +18,13 @@ module Undress
   end
 
   class Document #:nodoc:
-    def initialize(html, options)
-      @doc = Hpricot(html, options)
+    def initialize(html)
+      @doc = Nokogiri::HTML(html)
     end
 
     def self.add_markup(name, grammar)
       define_method "to_#{name}" do
-        grammar.process!(@doc)
-      end
-    end
-  end
-
-  module ::Hpricot #:nodoc:
-    class Elem #:nodoc:
-      def ancestors
-        node, ancestors = parent, Elements[]
-        while node.respond_to?(:parent) && node.parent
-          ancestors << node
-          node = node.parent
-        end
-        ancestors
+        grammar.process!(@doc % 'body')
       end
     end
   end
