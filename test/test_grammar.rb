@@ -71,5 +71,22 @@ module Undress
         assert_equal({ :id => "saludo" }, attributes)
       end
     end
+
+    class G1 < Undress::Grammar
+    end
+
+    class G2 < Undress::Grammar
+      post_processing '!!!', ""
+    end
+
+    context "incapsulation" do
+      test "icolates post_processing_rules" do
+        o1 = parse_with G1, "!!!"
+        assert_equal o1, '!!!'
+        o2 = parse_with G2, '!!!'
+        assert_equal o2, ''
+        assert_not_equal G1.post_processing_rules['!!!'], '!!!'
+      end
+    end
   end
 end

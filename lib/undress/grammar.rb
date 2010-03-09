@@ -3,8 +3,8 @@ module Undress
   # different markup language.
   class Grammar
     def self.inherited(base) # :nodoc:
-      base.instance_variable_set(:@post_processing_rules, post_processing_rules)
-      base.instance_variable_set(:@pre_processing_rules, pre_processing_rules)
+      base.instance_variable_set(:@post_processing_rules, post_processing_rules.dup)
+      base.instance_variable_set(:@pre_processing_rules, pre_processing_rules.dup)
     end
 
     # Add a parsing rule for a group of html tags.
