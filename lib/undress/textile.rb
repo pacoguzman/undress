@@ -2,7 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + "/../undress")
 
 module Undress
   class Textile < Grammar
-    whitelist_attributes :class, :id, :lang, :style, :colspan, :rowspan
 
     # whitespace handling
     post_processing(/\n\n+/, "\n\n")
@@ -84,7 +83,12 @@ module Undress
     rule_for(:td, :th) {|e| "|#{e.name == "th" ? "_. " : attributes(e)}#{content_of(e)}" }
 
     def attributes(node) #:nodoc:
-      filtered = super(node)
+      whitelisted_attributes = [:class, :id, :lang, :style, :colspan, :rowspan]
+
+      filtered = node.attributes.inject({}) do |attrs, (key, value)|
+        attrs[key.to_sym] = value.content if whitelisted_attributes.include?(key.to_sym)
+        attrs
+      end
 
       if filtered.has_key?(:colspan)
         return "\\#{filtered[:colspan]}. "
