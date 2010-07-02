@@ -31,6 +31,10 @@ module Undress
         assert_renders_latex "\\begin{itemize}\n\\item{first}\n\\item{second}\n\\end{itemize}\n", "<ul><li>first</li><li>second</li></ul>"
       end
 
+      test "converts ordered list tags" do
+        assert_renders_latex "\\begin{enumerate}\n\\item{first}\n\\item{second}\n\\end{enumerate}\n", "<ol><li>first</li><li>second</li></ol>"
+      end
+
       test "multiple tags at the same time" do
         assert_renders_latex "\\textbf{\\emph{italic bold}}\n\n", "<p><strong><em>italic bold</em></strong></p>" 
       end

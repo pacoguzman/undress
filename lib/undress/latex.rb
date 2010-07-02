@@ -9,6 +9,7 @@ module Undress
     rule_for(:br) {|e| "\\newline\n"}
 
     rule_for(:ul) {|e| "\\begin{itemize}#{content_of(e)}\n\\end{itemize}\n"}
+    rule_for(:ol) {|e| "\\begin{enumerate}#{content_of(e)}\n\\end{enumerate}\n"}
     rule_for(:li) {|e| "\n\\item{#{content_of(e)}}"}
 
     # inline elements
