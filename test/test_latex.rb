@@ -6,6 +6,12 @@ module Undress
       assert_equal latex, Undress(html).to_latex
     end
 
+    context "enconding" do
+      test "with utf-8 by default" do
+        assert_renders_latex "\\emph{Itálica}", "<em>Itálica</em>"
+      end
+    end
+
     context "Converting HTML to latex" do
       test "converts <p> tags" do
         assert_renders_latex "foo bar\n\n", "<p>foo bar</p>"
@@ -39,8 +45,6 @@ module Undress
         assert_renders_latex "\\textbf{\\emph{italic bold}}\n\n", "<p><strong><em>italic bold</em></strong></p>" 
       end
     end
-
-
 
   end
 end

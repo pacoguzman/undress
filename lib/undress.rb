@@ -4,8 +4,9 @@ require File.expand_path(File.dirname(__FILE__) + "/undress/grammar")
 
 # Load an HTML document so you can undress it. Pass it either a string or an IO
 # object.
-def Undress(html)
-  Undress::Document.new(html)
+def Undress(html, options = {})
+  options = {:url => nil, :encoding => "utf-8"}.merge(options)
+  Undress::Document.new(html, options[:url], options[:encoding])
 end
 
 module Undress
@@ -18,8 +19,8 @@ module Undress
   end
 
   class Document #:nodoc:
-    def initialize(html)
-      @doc = Nokogiri::HTML(html)
+    def initialize(html, url = nil, encoding = "utf-8")
+      @doc = Nokogiri::HTML(html, url, encoding)
     end
 
     def self.add_markup(name, grammar)
