@@ -44,6 +44,24 @@ module Undress
       test "multiple tags at the same time" do
         assert_renders_latex "\\textbf{\\emph{italic bold}}\n\n", "<p><strong><em>italic bold</em></strong></p>" 
       end
+
+      context "text alignment" do
+        test "convert text align left" do
+          assert_renders_latex "\\begin{flushleft}\\textbf{\\emph{italic bold}}\n\\end{flushleft}\n", "<p style=\"text-align: left;\"><strong><em>italic bold</em></strong></p>"
+          # Render correctly differents style attributes
+          assert_renders_latex "\\begin{flushleft}\\textbf{\\emph{italic bold}}\n\\end{flushleft}\n", "<p style=\"text-align:left;\"><strong><em>italic bold</em></strong></p>"
+          assert_renders_latex "\\begin{flushleft}\\textbf{\\emph{italic bold}}\n\\end{flushleft}\n", "<p style=\"text-align:left\"><strong><em>italic bold</em></strong></p>"
+          assert_renders_latex "\\begin{flushleft}\\textbf{\\emph{italic bold}}\n\\end{flushleft}\n", "<p style=\"text-align:left; color:#111111\"><strong><em>italic bold</em></strong></p>"
+        end
+
+        test "convert text align right" do
+          assert_renders_latex "\\begin{flushright}\\textbf{\\emph{italic bold}}\n\\end{flushright}\n", "<p style=\"text-align: right;\"><strong><em>italic bold</em></strong></p>"
+        end
+
+        test "convert text align center" do
+          assert_renders_latex "\\begin{center}\\textbf{\\emph{italic bold}}\n\\end{center}\n", "<p style=\"text-align: center;\"><strong><em>italic bold</em></strong></p>"
+        end
+      end
     end
 
   end
